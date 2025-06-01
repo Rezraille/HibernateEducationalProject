@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate Configuration DTD 3.0//EN"
+        "https://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- 1.  POSTGRES -->
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/aston_part_2</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.password">postgres</property>
+
+        <!-- 2. Настройка контекста текущей сессии Привязывает сессию к текущему потоку (ThreadLocal). -->
+        <!-- Сессия автоматически закрывается при завершении потока или явном вызове unbind(). -->
+        <property name="hibernate.current_session_context_class">thread</property>
+
+        <!-- 3. Диалект -->
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+        <!-- 4. Логи -->
+        <property name="hibernate.format_sql">true</property>  <!-- Форматированный SQL -->
+
+        <!-- 5. Дополнительные настройки -->
+        <property name="hbm2ddl.auto">update</property>  <!--Создание схемы БД -->
+        <property name="hibernate.cache.use_second_level_cache">false</property> <!-- Отключение кэша 2-го уровня -->
+        <property name="connection_pool_size">1</property> <!-- Только 1 активное соединение с БД на всё приложение -->
+        <property name="hibernate.connection.autocommit">false</property>  <!-- false -->
+
+        <!-- 6. Регистрация маппингов  -->
+        <mapping class="entity.User"/> <!-- Сущность -->
+
+    </session-factory>
+</hibernate-configuration>
