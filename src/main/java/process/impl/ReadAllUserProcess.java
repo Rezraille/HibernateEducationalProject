@@ -1,11 +1,12 @@
-package process;
+package process.impl;
 
 import entity.User;
 import dao.UserDaoService;
+import process.Process;
 
 import java.util.List;
 
-public class ReadAllUserProcess
+public class ReadAllUserProcess  implements Process
 {
     private final UserDaoService userDaoService;
 
@@ -14,6 +15,7 @@ public class ReadAllUserProcess
         this.userDaoService = userDaoService;
     }
 
+    @Override
     public void execute()
     {
         System.out.println("Запущен процесс чтения всех пользователей.");

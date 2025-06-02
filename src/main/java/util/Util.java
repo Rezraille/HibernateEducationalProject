@@ -78,7 +78,8 @@ public class Util
                     System.out.println("Не верный формат имени. Попробуйте снова.");
                 }
 
-            } catch (Exception exception) //todo проверить правельный порядок обработки ошибок
+            }
+            catch (Exception exception)
             {
                 System.out.println("Ошибка. Попробуйте снова.");
             }

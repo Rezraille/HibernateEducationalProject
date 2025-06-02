@@ -1,10 +1,11 @@
-package process;
+package process.impl;
 
 import entity.User;
 import dao.UserDaoService;
+import process.Process;
 import util.Util;
 
-public class UpdateUserProcess
+public class UpdateUserProcess  implements Process
 {
     private final UserDaoService userDaoService;
 
@@ -13,6 +14,7 @@ public class UpdateUserProcess
         this.userDaoService = userDaoService;
     }
 
+    @Override
     public void execute()
     {
         System.out.println("Запущен процесс изменения пользователя.");

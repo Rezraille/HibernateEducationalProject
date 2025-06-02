@@ -1,13 +1,14 @@
-package process;
+package process.impl;
 
 import entity.User;
 import dao.UserDaoService;
+import process.Process;
 import util.Util;
 
 import java.time.LocalDateTime;
 
 
-public class CreateUserProcess
+public class CreateUserProcess implements Process
 {
     private final UserDaoService userDaoService;
 
@@ -16,14 +17,15 @@ public class CreateUserProcess
         this.userDaoService = userDaoService;
     }
 
+    @Override
     public void execute()
     {
         System.out.println("Запущен процесс добавления пользователя.");
         User user = new User();
-        createId(user);
-        createName(user);
-        createEmail(user);
-        createAge(user);
+        setId(user);
+        setName(user);
+        setEmail(user);
+        setAge(user);
         user.setCreatedAt(LocalDateTime.now());
         if (!user.isEmpty())
         {
@@ -39,25 +41,25 @@ public class CreateUserProcess
         }
     }
 
-    private void createId(User user)
+    private void setId(User user)
     {
         System.out.println("Введите id");
         user.setId(Util.getInputNumber());
     }
 
-    private void createName(User user)
+    private void setName(User user)
     {
         System.out.println("Введите новое имя");
         user.setName(Util.getInputName());
     }
 
-    private void createEmail(User user)
+    private void setEmail(User user)
     {
         System.out.println("Введите новый email");
         user.setEmail(Util.getInputEmail());
     }
 
-    private void createAge(User user)
+    private void setAge(User user)
     {
         System.out.println("Введите новый возраст");
         user.setAge(Util.getInputNumber());

@@ -1,10 +1,11 @@
-package process;
+package process.impl;
 
 import entity.User;
 import dao.UserDaoService;
+import process.Process;
 import util.Util;
 
-public class DeleteUserProcess
+public class DeleteUserProcess  implements Process
 {
     private final UserDaoService userDaoService;
 
@@ -13,6 +14,7 @@ public class DeleteUserProcess
         this.userDaoService = userDaoService;
     }
 
+    @Override
     public void execute()
     {
         System.out.println("Запущен процесс удаления пользователя.");
