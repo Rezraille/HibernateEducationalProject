@@ -15,11 +15,11 @@ public abstract class DBService
 
         Session session = DBService.getCurrentSession();
         Transaction transaction = session.getTransaction();
-        if (!transaction.isActive())
+        if (transaction.isActive())
         {
-            transaction = session.beginTransaction();
+            transaction.rollback();
         }
-        return transaction;
+        return session.beginTransaction();
     }
 
     public static void transactionRollback(Transaction transaction)
