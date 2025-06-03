@@ -13,19 +13,16 @@ public class MainMenu
 {
     private static final Process UNKNOWN_CHOICE_PROCESS = () -> System.out.println("Не верный выбор. Попробуйте еще раз.");
 
-    private final UserDaoService userDaoService = new UserDaoService(new UserDao());
-
     private final Map<Integer, Process> menuChoiceToProcess = new HashMap<>();
 
 
-    public MainMenu()
+    public MainMenu(UserDaoService userDaoService)
     {
         menuChoiceToProcess.put(1, new CreateUserProcess(userDaoService));
         menuChoiceToProcess.put(2, new ReadUserProcess(userDaoService));
         menuChoiceToProcess.put(3, new UpdateUserProcess(userDaoService));
         menuChoiceToProcess.put(4, new DeleteUserProcess(userDaoService));
         menuChoiceToProcess.put(5, new ReadAllUserProcess(userDaoService));
-
     }
 
     public void run()

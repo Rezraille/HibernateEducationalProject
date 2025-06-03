@@ -6,14 +6,15 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.Transaction;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
-public abstract class DBService
+public class DBService
 {
-    private static final  SessionFactory sessionFactory = initializeSessionFactory();
+    private final  SessionFactory sessionFactory = initializeSessionFactory();
 
-    public static Transaction getCurrentTransaction()
+
+    public Transaction getTransaction()
     {
 
-        Session session = DBService.getCurrentSession();
+        Session session = getCurrentSession();
         Transaction transaction = session.getTransaction();
         if (transaction.isActive())
         {
@@ -22,7 +23,7 @@ public abstract class DBService
         return session.beginTransaction();
     }
 
-    public static void transactionRollback(Transaction transaction)
+    public void transactionRollback(Transaction transaction)
     {
         if (transaction.getStatus() == TransactionStatus.ACTIVE
                 || transaction.getStatus() == TransactionStatus.MARKED_ROLLBACK)
@@ -31,7 +32,7 @@ public abstract class DBService
         }
     }
 
-    public static Session getCurrentSession()
+    public  Session getCurrentSession()
     {
         return sessionFactory.getCurrentSession();
     }
@@ -42,7 +43,7 @@ public abstract class DBService
         configuration.configure();
         return configuration.buildSessionFactory();
     }
-    public static void closeSessionFactory()
+    public  void closeSessionFactory()
     {
         sessionFactory.close();
     }

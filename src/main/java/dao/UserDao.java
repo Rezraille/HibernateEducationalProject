@@ -7,22 +7,29 @@ import java.util.List;
 
 public class UserDao
 {
+    private final DBService serviceBase;
+
+    public UserDao(DBService serviceBase)
+    {
+        this.serviceBase = serviceBase;
+    }
+
     protected User getById(final Integer id)
     {
-        return DBService.getCurrentSession().get(User.class, id);
+        return serviceBase.getCurrentSession().get(User.class, id);
     }
     protected User create(final User entity)
     {
-        DBService.getCurrentSession().save(entity);
+        serviceBase.getCurrentSession().save(entity);
         return entity;
     }
     protected void update(final User entity, final int  oldUserId)
     {
         String sql = "UPDATE users SET id = '%d', name = '%s', age = '%d', email = '%s', created_at = '%s' WHERE id = '%d'";
-        Query query = DBService.getCurrentSession().createNativeQuery(
+        Query query = serviceBase.getCurrentSession().createNativeQuery(
                 String.format(sql, entity.getId(),entity.getName(),entity.getAge(),entity.getEmail(),entity.getCreatedAt(),oldUserId));
         query.executeUpdate();
-        DBService.getCurrentSession().flush();
+        serviceBase.getCurrentSession().flush();
     }
     protected void deleteById(final Integer entityId)
     {
@@ -31,10 +38,10 @@ public class UserDao
     }
     protected List<User> findAll()
     {
-        return DBService.getCurrentSession().createQuery("from " + User.class.getSimpleName(), User.class).list();
+        return serviceBase.getCurrentSession().createQuery("from " + User.class.getSimpleName(), User.class).list();
     }
     private void delete(final User entity)
     {
-        DBService.getCurrentSession().delete(entity);
+        serviceBase.getCurrentSession().delete(entity);
     }
 }

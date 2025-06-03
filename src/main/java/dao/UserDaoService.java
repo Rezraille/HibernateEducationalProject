@@ -10,15 +10,17 @@ import java.util.List;
 public class UserDaoService
 {
     private final UserDao userDao;
+    private final DBService serviceBase;
 
-    public UserDaoService(final UserDao userDao)
+    public UserDaoService(final UserDao userDao,DBService serviceBase)
     {
         this.userDao = userDao;
+        this.serviceBase = serviceBase;
     }
 
     public User getById(final Integer id)
     {
-        Transaction transaction = DBService.getCurrentTransaction();
+        Transaction transaction = serviceBase.getTransaction();
         User user = null;
         try
         {
@@ -26,7 +28,7 @@ public class UserDaoService
             transaction.commit();
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e)
         {
-            DBService.transactionRollback(transaction);
+            serviceBase.transactionRollback(transaction);
             System.out.println("Ошибка чтения из базы данных. Операция отменена.");
         }
         return user;
@@ -34,7 +36,7 @@ public class UserDaoService
 
     public User createUser(final User user)
     {
-        Transaction transaction = DBService.getCurrentTransaction();
+        Transaction transaction = serviceBase.getTransaction();
         try
         {
             User entity = userDao.create(user);
@@ -49,14 +51,14 @@ public class UserDaoService
                 System.out.printf("Запись с уникальным ключем существует в базе данных. Операция отменена.\n", user.getId());
             }
             System.out.println("Ошибка добавления в базу данных. Операция отменена.");
-            DBService.transactionRollback(transaction);
+            serviceBase.transactionRollback(transaction);
         }
         return null;
     }
 
     public void updateUser(final User user, int oldUserId)
     {
-        Transaction transaction = DBService.getCurrentTransaction();
+        Transaction transaction = serviceBase.getTransaction();
         try
         {
             userDao.update(user, oldUserId);
@@ -65,14 +67,14 @@ public class UserDaoService
 
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e)
         {
-            DBService.transactionRollback(transaction);
+            serviceBase.transactionRollback(transaction);
             System.out.println("Ошибка обновления базы данных. Операция отменена.");
         }
     }
 
     public boolean deleteById(final Integer id)
     {
-        Transaction transaction = DBService.getCurrentTransaction();
+        Transaction transaction = serviceBase.getTransaction();
         try
         {
             userDao.deleteById(id);
@@ -80,7 +82,7 @@ public class UserDaoService
             return true;
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e)
         {
-            DBService.transactionRollback(transaction);
+            serviceBase.transactionRollback(transaction);
             System.out.println("Ошибка удаления из базы данных. Операция отменена.");
             return false;
         }
@@ -88,7 +90,7 @@ public class UserDaoService
 
     public List<User> findAll()
     {
-        Transaction transaction = DBService.getCurrentTransaction();
+        Transaction transaction = serviceBase.getTransaction();
         try
         {
             List<User> users = userDao.findAll();
@@ -96,7 +98,7 @@ public class UserDaoService
             return users;
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e)
         {
-            DBService.transactionRollback(transaction);
+            serviceBase.transactionRollback(transaction);
             System.out.println("Ошибка вывода из базы данных. Операция отменена.");
         }
         return null;
