@@ -6,6 +6,7 @@ import process.Process;
 import util.Util;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 
 public class CreateUserProcess implements Process
@@ -29,8 +30,8 @@ public class CreateUserProcess implements Process
         user.setCreatedAt(LocalDateTime.now());
         if (!user.isEmpty())
         {
-            User newUser = userDaoService.createUser(user);
-            if (newUser == null)
+            Optional<User> optionalNewUser = userDaoService.createUser(user);
+            if (!optionalNewUser.isPresent())
             {
                 System.out.println("Ошибка, пользователь не создан.");
             }

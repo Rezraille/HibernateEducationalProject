@@ -5,6 +5,8 @@ import dao.UserDaoService;
 import process.Process;
 import util.Util;
 
+import java.util.Optional;
+
 public class DeleteUserProcess  implements Process
 {
     private final UserDaoService userDaoService;
@@ -20,10 +22,10 @@ public class DeleteUserProcess  implements Process
         System.out.println("Запущен процесс удаления пользователя.");
         System.out.println("Введите id.");
         Integer id = Util.getInputNumber();
-        User user = userDaoService.getById(id);
-        if (user != null)
+        Optional<User> optionalUser = userDaoService.getById(id);
+        if (optionalUser.isPresent())
         {
-            userDaoService.deleteById(user.getId());
+            userDaoService.deleteById(optionalUser.get().getId());
             System.out.println("Пользователь удален успешно.");
         }
         else

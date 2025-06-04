@@ -5,6 +5,8 @@ import dao.UserDaoService;
 import process.Process;
 import util.Util;
 
+import java.util.Optional;
+
 public class UpdateUserProcess  implements Process
 {
     private final UserDaoService userDaoService;
@@ -20,14 +22,14 @@ public class UpdateUserProcess  implements Process
         System.out.println("Запущен процесс изменения пользователя.");
         System.out.println("Введите id.");
         Integer oldId = Util.getInputNumber();
-        User user = userDaoService.getById(oldId);
-        if (user != null)
+        Optional<User> optionalUser = userDaoService.getById(oldId);
+        if (optionalUser.isPresent())
         {
-            changeId(user);
-            chahgeName(user);
-            chahgeEmail(user);
-            chahgeAge(user);
-            userDaoService.updateUser(user,oldId);
+            changeId(optionalUser.get());
+            chahgeName(optionalUser.get());
+            chahgeEmail(optionalUser.get());
+            chahgeAge(optionalUser.get());
+            userDaoService.updateUser(optionalUser.get(),oldId);
             System.out.println("Пользователь успешно изменен.");
         } else
         {

@@ -5,6 +5,8 @@ import dao.UserDaoService;
 import process.Process;
 import util.Util;
 
+import java.util.Optional;
+
 public class ReadUserProcess implements Process
 {
     private final UserDaoService userDaoService;
@@ -20,11 +22,11 @@ public class ReadUserProcess implements Process
         System.out.println("Запущен процесс чтения пользователя.");
         System.out.println("Введите id.");
         Integer id = Util.getInputNumber();
-        User user = userDaoService.getById(id);
-        if (user != null)
+        Optional <User> optionalUser = userDaoService.getById(id);
+        if (optionalUser.isPresent())
         {
             System.out.println("\nПользователь успешно найден.");
-            System.out.println(user);
+            System.out.println(optionalUser.get());
         }
         else
         {

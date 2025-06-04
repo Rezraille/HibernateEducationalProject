@@ -2,6 +2,8 @@ package dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import entity.User;
 import org.hibernate.Transaction;
 
@@ -23,7 +25,7 @@ public class UserDaoService
         this.serviceBase = serviceBase;
     }
 
-    public User getById(final Integer id)
+    public Optional<User> getById(final Integer id)
     {
         logger.trace("getById() id = " + id);
         Transaction transaction = serviceBase.getTransaction();
@@ -37,10 +39,10 @@ public class UserDaoService
             serviceBase.transactionRollback(transaction);
             logger.error("Ошибка чтения из базы данных. Операция отменена.",e);
         }
-        return user;
+        return Optional.ofNullable(user);
     }
 
-    public User createUser(final User user)
+    public Optional<User> createUser(final User user)
     {
         logger.trace("createUser() = " + user);
         Transaction transaction = serviceBase.getTransaction();
@@ -49,8 +51,7 @@ public class UserDaoService
             User entity = userDao.create(user);
 
             transaction.commit();
-
-            return entity;
+            return Optional.ofNullable(entity);
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e)
         {
             if (e.getCause() instanceof ConstraintViolationException)
@@ -60,7 +61,7 @@ public class UserDaoService
             serviceBase.transactionRollback(transaction);
             logger.error("Ошибка добавления в базу данных. Операция отменена.",e);
         }
-        return null;
+        return Optional.ofNullable(user);
     }
 
     public void updateUser(final User user, int oldUserId)
