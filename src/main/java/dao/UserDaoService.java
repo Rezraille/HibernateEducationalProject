@@ -1,14 +1,19 @@
 package dao;
 
+import java.util.ArrayList;
+import java.util.List;
 import entity.User;
 import org.hibernate.Transaction;
-import org.hibernate.exception.ConstraintViolationException;
 
+import org.apache.log4j.Logger;
+
+import org.hibernate.exception.ConstraintViolationException;
 import javax.persistence.PersistenceException;
-import java.util.List;
+
 
 public class UserDaoService
 {
+    private static final Logger logger  = Logger.getLogger(UserDaoService.class);
     private final UserDao userDao;
     private final DBService serviceBase;
 
@@ -20,6 +25,7 @@ public class UserDaoService
 
     public User getById(final Integer id)
     {
+        logger.trace("getById() id = " + id);
         Transaction transaction = serviceBase.getTransaction();
         User user = null;
         try
@@ -29,13 +35,14 @@ public class UserDaoService
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e)
         {
             serviceBase.transactionRollback(transaction);
-            System.out.println("Ошибка чтения из базы данных. Операция отменена.");
+            logger.error("Ошибка чтения из базы данных. Операция отменена.",e);
         }
         return user;
     }
 
     public User createUser(final User user)
     {
+        logger.trace("createUser() = " + user);
         Transaction transaction = serviceBase.getTransaction();
         try
         {
@@ -50,14 +57,15 @@ public class UserDaoService
             {
                 System.out.printf("Запись с уникальным ключем существует в базе данных. Операция отменена.\n", user.getId());
             }
-            System.out.println("Ошибка добавления в базу данных. Операция отменена.");
             serviceBase.transactionRollback(transaction);
+            logger.error("Ошибка добавления в базу данных. Операция отменена.",e);
         }
         return null;
     }
 
     public void updateUser(final User user, int oldUserId)
     {
+        logger.trace("updateUser() = " + user);
         Transaction transaction = serviceBase.getTransaction();
         try
         {
@@ -68,12 +76,13 @@ public class UserDaoService
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e)
         {
             serviceBase.transactionRollback(transaction);
-            System.out.println("Ошибка обновления базы данных. Операция отменена.");
+            logger.error("Ошибка обновления базы данных. Операция отменена.",e);
         }
     }
 
     public boolean deleteById(final Integer id)
     {
+        logger.trace("deleteById() id = " + id);
         Transaction transaction = serviceBase.getTransaction();
         try
         {
@@ -83,24 +92,25 @@ public class UserDaoService
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e)
         {
             serviceBase.transactionRollback(transaction);
-            System.out.println("Ошибка удаления из базы данных. Операция отменена.");
+            logger.error("Ошибка удаления из базы данных. Операция отменена.",e);
             return false;
         }
     }
 
     public List<User> findAll()
     {
+        logger.trace("findAll()");
         Transaction transaction = serviceBase.getTransaction();
+        List<User> users = new ArrayList<>();
         try
         {
-            List<User> users = userDao.findAll();
+            users = userDao.findAll();
             transaction.commit();
-            return users;
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e)
         {
             serviceBase.transactionRollback(transaction);
-            System.out.println("Ошибка вывода из базы данных. Операция отменена.");
+            logger.error("Ошибка вывода из базы данных. Операция отменена.",e);
         }
-        return null;
+        return users;
     }
 }
