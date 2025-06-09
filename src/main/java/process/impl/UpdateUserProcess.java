@@ -10,10 +10,12 @@ import java.util.Optional;
 public class UpdateUserProcess  implements Process
 {
     private final UserDaoService userDaoService;
+    private final Util util;
 
-    public UpdateUserProcess(UserDaoService userDaoService)
+    public UpdateUserProcess(UserDaoService userDaoService, Util util)
     {
         this.userDaoService = userDaoService;
+        this.util = util;
     }
 
     @Override
@@ -21,14 +23,14 @@ public class UpdateUserProcess  implements Process
     {
         System.out.println("Запущен процесс изменения пользователя.");
         System.out.println("Введите id.");
-        Integer oldId = Util.getInputNumber();
+        Integer oldId = util.getInputNumber();
         Optional<User> optionalUser = userDaoService.getById(oldId);
         if (optionalUser.isPresent())
         {
             changeId(optionalUser.get());
-            chahgeName(optionalUser.get());
-            chahgeEmail(optionalUser.get());
-            chahgeAge(optionalUser.get());
+            changeName(optionalUser.get());
+            changeEmail(optionalUser.get());
+            changeAge(optionalUser.get());
             userDaoService.updateUser(optionalUser.get(),oldId);
             System.out.println("Пользователь успешно изменен.");
         } else
@@ -41,41 +43,41 @@ public class UpdateUserProcess  implements Process
     private void changeId(User user)
     {
         System.out.println("Чтобы изменить: id, Введите \"1\" - Да; \"2\" - Нет.");
-        int choice = Util.getInputNumber();
+        int choice = util.getInputNumber();
         if (choice == 1)
         {
             System.out.println("Введите новый id");
-            user.setId(Util.getInputNumber());
+            user.setId(util.getInputNumber());
         }
     }
 
-    private void chahgeName(User user)
+    private void changeName(User user)
     {
         System.out.println("Чтобы изменить: name, Введите \"1\" - Да; \"2\" - Нет.");
-        if (Util.getInputNumber() == 1)
+        if (util.getInputNumber() == 1)
         {
             System.out.println("Введите новое имя");
-            user.setName(Util.getInputName());
+            user.setName(util.getInputName());
         }
     }
 
-    private void chahgeEmail(User user)
+    private void changeEmail(User user)
     {
         System.out.println("Чтобы изменить: email, Введите \"1\" - Да; \"2\" - Нет.");
-        if (Util.getInputNumber() == 1)
+        if (util.getInputNumber() == 1)
         {
             System.out.println("Введите новый email");
-            user.setEmail(Util.getInputEmail());
+            user.setEmail(util.getInputEmail());
         }
     }
 
-    private void chahgeAge(User user)
+    private void changeAge(User user)
     {
         System.out.println("Чтобы изменить: age, Введите \"1\" - Да; \"2\" - Нет.");
-        if (Util.getInputNumber() == 1)
+        if (util.getInputNumber() == 1)
         {
             System.out.println("Введите новый возраст");
-            user.setAge(Util.getInputNumber());
+            user.setAge(util.getInputNumber());
         }
     }
 

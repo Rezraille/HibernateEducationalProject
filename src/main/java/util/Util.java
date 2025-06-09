@@ -5,9 +5,9 @@ import java.util.regex.Pattern;
 
 public class Util
 {
-    private static final Scanner scanner = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
 
-    public static Integer getInputNumber()
+    public Integer getInputNumber()
     {
         Integer number = null;
         while (true)
@@ -34,7 +34,7 @@ public class Util
         }
     }
 
-    public static String getInputEmail()
+    public String getInputEmail()
     {
         String regex = "[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9_-]+";
         Pattern pattern = Pattern.compile(regex);
@@ -59,7 +59,7 @@ public class Util
         }
     }
 
-    public static String getInputName()
+    public String getInputName()
     {
         String regex = "[\\p{L}]+";
         Pattern pattern = Pattern.compile(regex);
@@ -84,5 +84,9 @@ public class Util
                 System.out.println("Ошибка. Попробуйте снова.");
             }
         }
+    }
+    void setScanner(Scanner scanner)
+    {
+        this.scanner = scanner;
     }
 }

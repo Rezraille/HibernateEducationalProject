@@ -5,10 +5,10 @@
 <hibernate-configuration>
     <session-factory>
         <!-- 1.  POSTGRES -->
-        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/aston_part_2</property>
-        <property name="hibernate.connection.username">postgres</property>
-        <property name="hibernate.connection.password">postgres</property>
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property> <!-- ${db.driver} -->
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5433/</property> <!--${db.url}  -->
+        <property name="hibernate.connection.username">postgres</property> <!-- ${db.url}  -->
+        <property name="hibernate.connection.password">postgres</property> <!--  postgres ${db.password}-->
 
         <!-- 2. Настройка контекста текущей сессии Привязывает сессию к текущему потоку (ThreadLocal). -->
         <!-- Сессия автоматически закрывается при завершении потока или явном вызове unbind(). -->

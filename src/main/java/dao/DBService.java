@@ -10,8 +10,13 @@ import org.hibernate.resource.transaction.spi.TransactionStatus;
 public class DBService
 {
     private static final Logger logger  = Logger.getLogger(DBService.class);
-    private final  SessionFactory sessionFactory = initializeSessionFactory();
+    private final  SessionFactory sessionFactory;
 
+
+    public DBService(SessionFactory sessionFactory)
+    {
+        this.sessionFactory = sessionFactory;
+    }
 
     public Transaction getTransaction()
     {
@@ -41,7 +46,7 @@ public class DBService
         return sessionFactory.getCurrentSession();
     }
 
-    private static SessionFactory initializeSessionFactory()
+   public static SessionFactory initializeSessionFactory()
     {
         logger.trace("initializeSessionFactory()");
         Configuration configuration = new Configuration();

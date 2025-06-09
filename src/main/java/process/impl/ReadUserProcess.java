@@ -10,10 +10,12 @@ import java.util.Optional;
 public class ReadUserProcess implements Process
 {
     private final UserDaoService userDaoService;
+    private final Util util;
 
-    public ReadUserProcess(UserDaoService userDaoService)
+    public ReadUserProcess(UserDaoService userDaoService, Util util)
     {
         this.userDaoService = userDaoService;
+        this.util = util;
     }
 
     @Override
@@ -21,7 +23,7 @@ public class ReadUserProcess implements Process
     {
         System.out.println("Запущен процесс чтения пользователя.");
         System.out.println("Введите id.");
-        Integer id = Util.getInputNumber();
+        Integer id = util.getInputNumber();
         Optional <User> optionalUser = userDaoService.getById(id);
         if (optionalUser.isPresent())
         {

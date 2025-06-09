@@ -66,7 +66,7 @@ public class UserDaoService
 
     public void updateUser(final User user, int oldUserId)
     {
-        logger.trace("updateUser() = " + user);
+        logger.trace("updateUser() id = " + oldUserId + " with " + user);
         Transaction transaction = serviceBase.getTransaction();
         try
         {

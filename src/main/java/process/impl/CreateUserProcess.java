@@ -12,10 +12,12 @@ import java.util.Optional;
 public class CreateUserProcess implements Process
 {
     private final UserDaoService userDaoService;
+    private final Util util;
 
-    public CreateUserProcess(UserDaoService userDaoService)
+    public CreateUserProcess(UserDaoService userDaoService, Util util)
     {
         this.userDaoService = userDaoService;
+        this.util = util;
     }
 
     @Override
@@ -45,24 +47,24 @@ public class CreateUserProcess implements Process
     private void setId(User user)
     {
         System.out.println("Введите id");
-        user.setId(Util.getInputNumber());
+        user.setId(util.getInputNumber());
     }
 
     private void setName(User user)
     {
         System.out.println("Введите новое имя");
-        user.setName(Util.getInputName());
+        user.setName(util.getInputName());
     }
 
     private void setEmail(User user)
     {
         System.out.println("Введите новый email");
-        user.setEmail(Util.getInputEmail());
+        user.setEmail(util.getInputEmail());
     }
 
     private void setAge(User user)
     {
         System.out.println("Введите новый возраст");
-        user.setAge(Util.getInputNumber());
+        user.setAge(util.getInputNumber());
     }
 }

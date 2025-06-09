@@ -15,13 +15,16 @@ public class MainMenu
 
     private final Map<Integer, Process> menuChoiceToProcess = new HashMap<>();
 
+    private final Util util;
 
-    public MainMenu(UserDaoService userDaoService)
+
+    public MainMenu(UserDaoService userDaoService, Util util)
     {
-        menuChoiceToProcess.put(1, new CreateUserProcess(userDaoService));
-        menuChoiceToProcess.put(2, new ReadUserProcess(userDaoService));
-        menuChoiceToProcess.put(3, new UpdateUserProcess(userDaoService));
-        menuChoiceToProcess.put(4, new DeleteUserProcess(userDaoService));
+        this.util = util;
+        menuChoiceToProcess.put(1, new CreateUserProcess(userDaoService,util));
+        menuChoiceToProcess.put(2, new ReadUserProcess(userDaoService,util));
+        menuChoiceToProcess.put(3, new UpdateUserProcess(userDaoService,util));
+        menuChoiceToProcess.put(4, new DeleteUserProcess(userDaoService,util));
         menuChoiceToProcess.put(5, new ReadAllUserProcess(userDaoService));
     }
 
@@ -30,7 +33,7 @@ public class MainMenu
         while (true)
         {
             showMenu();
-            int choice = Util.getInputNumber();
+            int choice = util.getInputNumber();
             if (choice == 0)
             {
                 System.out.println("Выход из программы.");

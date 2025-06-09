@@ -9,6 +9,7 @@ HibernateEducationalProject.
 - Логирование.
 - Транзакционность для операций с БД.
 - DAO-паттерн для отделения логики работы с БД.
+- JUnit 5, Mockito,Testcontainers.
 
 Ответственный: Мамукелашвили Натэла Зазовна
 Email: akselerat96@gmail.com
