@@ -2,37 +2,39 @@ package process.impl;
 
 import dao.UserDaoService;
 import entity.User;
+import org.mockito.*;
 import util.Util;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
-import org.mockito.AdditionalAnswers;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InOrder;
-import org.mockito.Mockito;
+
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-public class UpdateUserProcessTest
-{
+public class UpdateUserProcessTest {
+    @Mock
     private Util util;
+    @Mock
     private UserDaoService userDaoService;
 
     @BeforeEach
-    public void setup()
-    {
-        util = Mockito.mock(Util.class);
-        userDaoService = Mockito.mock(UserDaoService.class);
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void execute_whenUpdateOk()
-    {
+    public void execute_whenUpdateOk() {
         int oldId = 3;
         int choiceYes = 1;
         int newId = 2;
@@ -63,7 +65,7 @@ public class UpdateUserProcessTest
         inOrder.verify(userDaoService).updateUser(captureUser.capture(), captureId.capture());
 
         User userUpdateArgument = captureUser.getValue();
-        Integer oldIdArgument= captureId.getValue();
+        Integer oldIdArgument = captureId.getValue();
 
         Assertions.assertNotNull(userUpdateArgument);
         Assert.assertTrue(oldIdArgument == oldId);
@@ -71,5 +73,23 @@ public class UpdateUserProcessTest
         Assert.assertEquals(userUpdateArgument.getName(), newName);
         Assert.assertEquals(userUpdateArgument.getEmail(), newEmail);
         Assert.assertTrue(userUpdateArgument.getAge() == newAge);
+    }
+
+    @Test
+    public void execute_whenNotExist() {
+        int id = 3;
+        String expectedOutput = "Пользователь для обновления не найден.";
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        Mockito.doReturn(id).when(util).getInputNumber();
+        Mockito.doReturn(Optional.empty()).when(userDaoService).getById(id);
+
+        UpdateUserProcess process = new UpdateUserProcess(userDaoService, util);
+        process.execute();
+
+        Mockito.verify(userDaoService, never()).updateUser(any(User.class), anyInt());
+
+        Assert.assertTrue(outContent.toString().contains(expectedOutput));
     }
 }

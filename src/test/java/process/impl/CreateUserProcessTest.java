@@ -1,39 +1,40 @@
 package process.impl;
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import org.mockito.*;
 import util.Util;
 import entity.User;
 import dao.UserDaoService;
 
-import org.mockito.AdditionalAnswers;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InOrder;
-import org.mockito.Mockito;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class CreateUserProcessTest
-{
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.never;
 
+public class CreateUserProcessTest {
+    @Mock
     private Util util;
+    @Mock
     private UserDaoService userDaoService;
 
     @BeforeEach
-    public void setup()
-    {
-        util = Mockito.mock(Util.class);
-        userDaoService = Mockito.mock(UserDaoService.class);
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
     }
 
 
     @Test
-    public void execute_whenCreateOk()
-    {
+    public void execute_whenCreateOk() {
         int id = 1;
         int age = 11;
         String name = "createName";
@@ -64,6 +65,20 @@ public class CreateUserProcessTest
         Assert.assertEquals(userCreate.getName(), name);
         Assert.assertEquals(userCreate.getEmail(), email);
         Assert.assertTrue(userCreate.getAge() == age);
+    }
+
+    @Test
+    public void execute_whenNotExist() {
+        String expectedOutput = "Ошибка, пользователь не создан.";
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        Mockito.doReturn(Optional.empty()).when(userDaoService).createUser(new User());
+
+        CreateUserProcess process = new CreateUserProcess(userDaoService, util);
+        process.execute();
+
+        Assert.assertTrue(outContent.toString().contains(expectedOutput));
     }
 
 }

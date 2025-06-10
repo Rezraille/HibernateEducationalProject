@@ -3,30 +3,34 @@ package process.impl;
 
 import dao.UserDaoService;
 import entity.User;
+import org.mockito.*;
 import util.Util;
 
-import org.mockito.ArgumentCaptor;
-import org.mockito.InOrder;
-import org.mockito.Mockito;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.never;
+
 public class ReadUserProcessTest
 {
+    @Mock
     private Util util;
+    @Mock
     private UserDaoService userDaoService;
 
     @BeforeEach
-    public void setup()
-    {
-        util = Mockito.mock(Util.class);
-        userDaoService = Mockito.mock(UserDaoService.class);
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
@@ -56,5 +60,24 @@ public class ReadUserProcessTest
 
         Assertions.assertNotNull(idArgument);
         Assert.assertTrue(idArgument == id);
+    }
+
+    @Test
+    public void execute_whenNotExist()
+    {
+        int id = 3;
+        String expectedOutput = "Пользователь для чтения не найден.";
+
+        Mockito.doReturn(id).when(util).getInputNumber();
+        Mockito.doReturn(Optional.empty()).when(userDaoService).getById(id);
+
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        ReadUserProcess process = new ReadUserProcess(userDaoService, util);
+        process.execute();
+
+
+        Assert.assertTrue(outContent.toString().contains(expectedOutput));
     }
 }

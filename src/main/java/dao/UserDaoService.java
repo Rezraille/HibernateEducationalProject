@@ -56,7 +56,7 @@ public class UserDaoService
         {
             if (e.getCause() instanceof ConstraintViolationException)
             {
-                System.out.printf("Запись с уникальным ключем существует в базе данных. Операция отменена.\n", user.getId());
+                System.out.printf("Запись %d с уникальным ключем существует в базе данных. Операция отменена.\n", user.getId());
             }
             serviceBase.transactionRollback(transaction);
             logger.error("Ошибка добавления в базу данных. Операция отменена.",e);

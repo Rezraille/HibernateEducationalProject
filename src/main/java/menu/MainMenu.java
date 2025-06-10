@@ -13,7 +13,7 @@ public class MainMenu
 {
     private static final Process UNKNOWN_CHOICE_PROCESS = () -> System.out.println("Не верный выбор. Попробуйте еще раз.");
 
-    private final Map<Integer, Process> menuChoiceToProcess = new HashMap<>();
+    final Map<Integer, Process> menuChoiceToProcess = new HashMap<>();
 
     private final Util util;
 
